@@ -181,11 +181,14 @@ function Clients() {
   };
 
   return (
-    <div className="clients-page">
-      <div className="page-header">
+    <div className="clients-page premium-page">
+      <div className="page-hero">
         <div>
-          <h2>Clients Management</h2>
-          <p>Manage salon clients, loyalty, and smart offers.</p>
+          <p className="dashboard-label">Veloura Client Experience</p>
+          <h2>Client memory, loyalty, and premium service tracking</h2>
+          <p className="dashboard-subtitle">
+            Manage clients with visit history, loyalty intelligence, and smart offers.
+          </p>
         </div>
 
         <button className="primary-btn" onClick={() => setShowForm(!showForm)}>
@@ -193,10 +196,10 @@ function Clients() {
         </button>
       </div>
 
-      <div className="toolbar">
+      <div className="toolbar premium-toolbar">
         <input
           type="text"
-          placeholder="Search client..."
+          placeholder="Search client by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
@@ -204,7 +207,7 @@ function Clients() {
       </div>
 
       {showForm && (
-        <form className="client-form" onSubmit={handleAddOrUpdateClient}>
+        <form className="client-form premium-form" onSubmit={handleAddOrUpdateClient}>
           <div className="form-grid">
             <input
               type="text"
@@ -256,7 +259,7 @@ function Clients() {
 
           <textarea
             name="notes"
-            placeholder="Notes"
+            placeholder="Client Notes"
             value={newClient.notes}
             onChange={handleChange}
             rows="4"
@@ -298,7 +301,7 @@ function Clients() {
         </form>
       )}
 
-      <div className="table-card">
+      <div className="table-card premium-table-card">
         <table className="clients-table">
           <thead>
             <tr>
@@ -318,7 +321,14 @@ function Clients() {
             {filteredClients.length > 0 ? (
               filteredClients.map((client) => (
                 <tr key={client.id}>
-                  <td>{client.name}</td>
+                  <td>
+                    <div className="client-name-cell">
+                      <div className="client-avatar">
+                        {client.name ? client.name.charAt(0).toUpperCase() : "C"}
+                      </div>
+                      <span>{client.name}</span>
+                    </div>
+                  </td>
                   <td>{client.phone}</td>
                   <td>{client.service}</td>
                   <td>{client.visits}</td>

@@ -41,40 +41,42 @@ function Login() {
 
   return (
     <div className="login-page">
-      <div className="login-card">
-        <h2>Pearls Salon Login</h2>
-        <p>Sign in to access the smart management system.</p>
+      <div className="login-card modern-login-card">
+        <div className="login-brand">
+          <div className="login-brand-badge">V</div>
+          <h2>Veloura Salon</h2>
+          <p>Smart management system for premium salon operations.</p>
+        </div>
 
         <form onSubmit={handleLogin} className="login-form">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
+          <div className="login-input-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+          <div className="login-input-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
 
           {errorMessage && <p className="error-text">{errorMessage}</p>}
 
           <button type="submit" className="primary-btn login-btn">
-            Login
+            Sign In
           </button>
         </form>
-
-        <div className="login-demo">
-          <p><strong>Demo Accounts:</strong></p>
-          <p>admin@pearls.com / 123456</p>
-          <p>reception@pearls.com / 123456</p>
-          <p>staff@pearls.com / 123456</p>
-        </div>
       </div>
     </div>
   );

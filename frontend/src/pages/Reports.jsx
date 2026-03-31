@@ -36,7 +36,7 @@ function Reports() {
   const vipClients = clients.filter((c) => c.loyaltyLevel === "VIP");
 
   const completedAppointments = appointments.filter(
-    (a) => a.status === "Completed"
+    (a) => String(a.status).toLowerCase() === "completed"
   );
 
   const completionRate =
@@ -66,9 +66,7 @@ function Reports() {
       }
     });
 
-    return maxService
-      ? `${maxService} (${maxCount} bookings)`
-      : "No data yet";
+    return maxService ? `${maxService} (${maxCount})` : "No data yet";
   }, [appointments]);
 
   const topStaff = useMemo(() => {
@@ -89,7 +87,7 @@ function Reports() {
       }
     });
 
-    return best ? `${best} (${max} appointments)` : "No data yet";
+    return best ? `${best} (${max})` : "No data yet";
   }, [appointments]);
 
   const topClient = useMemo(() => {
@@ -104,102 +102,133 @@ function Reports() {
   }, [clients]);
 
   const cards = [
-    { title: "Total Clients", value: clients.length },
-    { title: "VIP Clients", value: vipClients.length },
-    { title: "Appointments", value: appointments.length },
-    { title: "Completion Rate", value: `${completionRate}%` },
+    { title: "Total Clients", value: clients.length, subtitle: "Client records" },
+    { title: "VIP Clients", value: vipClients.length, subtitle: "High-value loyalty" },
+    { title: "Appointments", value: appointments.length, subtitle: "All bookings" },
+    { title: "Completion Rate", value: `${completionRate}%`, subtitle: "Operational efficiency" },
   ];
 
   return (
-    <div className="reports-page">
-      <div className="page-header">
+    <div className="reports-page premium-page">
+      <div className="page-hero">
         <div>
-          <h2>Smart Reports & Insights</h2>
-          <p>Operational analytics powered by salon data and AI.</p>
+          <p className="dashboard-label">Veloura Business Intelligence</p>
+          <h2>Smart reports and premium operational insights</h2>
+          <p className="dashboard-subtitle">
+            Analyze salon performance, team activity, stock risk, and AI-powered recommendations.
+          </p>
         </div>
       </div>
 
-      <div className="cards-grid">
+      <div className="cards-grid premium-cards-grid">
         {cards.map((card) => (
-          <div key={card.title} className="card">
+          <div key={card.title} className="card premium-card">
+            <div className="card-top-line"></div>
             <h3>{card.title}</h3>
             <p>{card.value}</p>
+            <span className="card-subtitle">{card.subtitle}</span>
           </div>
         ))}
       </div>
 
       <div className="dashboard-sections">
-        <div className="panel">
-          <h3>Business Insights</h3>
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>Business Insights</h3>
+            <span className="panel-badge">{clients.length}</span>
+          </div>
+
           <ul>
-            <li>Most popular service: {mostPopularService}</li>
-            <li>Top performing staff: {topStaff}</li>
-            <li>Most loyal client: {topClient}</li>
-            <li>VIP clients: {vipClients.length}</li>
+            <li className="notification-item">Most popular service: {mostPopularService}</li>
+            <li className="notification-item">Top performing staff: {topStaff}</li>
+            <li className="notification-item">Most loyal client: {topClient}</li>
+            <li className="notification-item">VIP clients: {vipClients.length}</li>
           </ul>
         </div>
 
-        <div className="panel">
-          <h3>Operational Alerts</h3>
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>Operational Alerts</h3>
+            <span className="panel-badge danger-badge">{lowStockItems.length}</span>
+          </div>
+
           <ul>
-            <li>Total appointments: {appointments.length}</li>
-            <li>Completed appointments: {completedAppointments.length}</li>
-            <li>Completion rate: {completionRate}%</li>
-            <li>Low stock items: {lowStockItems.length}</li>
+            <li className="notification-item">Total appointments: {appointments.length}</li>
+            <li className="notification-item">Completed appointments: {completedAppointments.length}</li>
+            <li className="notification-item">Completion rate: {completionRate}%</li>
+            <li className="notification-item">Low stock items: {lowStockItems.length}</li>
           </ul>
         </div>
       </div>
 
-      <div className="dashboard-sections" style={{ marginTop: "18px" }}>
-        <div className="panel">
-          <h3>AI Peak & Loyalty Analysis</h3>
+      <div className="dashboard-sections dashboard-sections-bottom">
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>AI Peak & Loyalty Analysis</h3>
+            <span className="panel-badge info-badge">AI</span>
+          </div>
+
           <ul>
-            <li>
+            <li className="notification-item">
               Peak hour: {aiAnalysis?.peak_analysis?.peak_hour || "No data"}
             </li>
-            <li>
+            <li className="notification-item">
               Peak bookings: {aiAnalysis?.peak_analysis?.peak_bookings ?? 0}
             </li>
-            <li>
+            <li className="notification-item">
               VIP ratio: {aiAnalysis?.loyalty_analysis?.vip_ratio ?? 0}%
             </li>
-            <li>
-              Top preferred service:{" "}
-              {aiAnalysis?.loyalty_analysis?.top_preferred_service || "No data"}
+            <li className="notification-item">
+              Top preferred service: {aiAnalysis?.loyalty_analysis?.top_preferred_service || "No data"}
             </li>
           </ul>
         </div>
 
-        <div className="panel">
-          <h3>AI Stock Risk Analysis</h3>
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>AI Stock Risk Analysis</h3>
+            <span className="panel-badge danger-badge">
+              {aiAnalysis?.stock_analysis?.critical_stock_count ?? 0}
+            </span>
+          </div>
+
           <ul>
-            <li>
+            <li className="notification-item">
               Low stock count: {aiAnalysis?.stock_analysis?.low_stock_count ?? 0}
             </li>
-            <li>
-              Critical stock count:{" "}
-              {aiAnalysis?.stock_analysis?.critical_stock_count ?? 0}
+            <li className="notification-item">
+              Critical stock count: {aiAnalysis?.stock_analysis?.critical_stock_count ?? 0}
             </li>
             {aiAnalysis?.stock_analysis?.critical_stock_items?.length > 0 ? (
               aiAnalysis.stock_analysis.critical_stock_items.map((item, index) => (
-                <li key={index}>{item} needs urgent reorder</li>
+                <li key={index} className="notification-item">
+                  {item} needs urgent reorder
+                </li>
               ))
             ) : (
-              <li>No critical stock items.</li>
+              <li className="notification-item">No critical stock items.</li>
             )}
           </ul>
         </div>
       </div>
 
-      <div className="panel" style={{ marginTop: "18px" }}>
-        <h3>AI Recommendations</h3>
+      <div className="panel premium-panel">
+        <div className="panel-header">
+          <h3>AI Recommendations</h3>
+          <span className="panel-badge info-badge">
+            {aiAnalysis?.recommendations?.length || 0}
+          </span>
+        </div>
+
         <ul>
           {aiAnalysis?.recommendations?.length > 0 ? (
             aiAnalysis.recommendations.map((item, index) => (
-              <li key={index}>{item}</li>
+              <li key={index} className="notification-item">
+                {item}
+              </li>
             ))
           ) : (
-            <li>No AI recommendations yet.</li>
+            <li className="notification-item">No AI recommendations yet.</li>
           )}
         </ul>
       </div>

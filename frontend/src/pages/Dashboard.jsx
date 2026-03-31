@@ -49,39 +49,93 @@ function Dashboard() {
   );
 
   const availableStaff = staffList.filter(
-    (staff) => staff.status === "Available"
+    (staff) => String(staff.status).toLowerCase() === "available"
   );
 
   const vipClients = clients.filter(
     (client) => client.loyaltyLevel === "VIP"
   );
 
+  const pendingAppointments = appointments.filter(
+    (appointment) => String(appointment.status).toLowerCase() === "pending"
+  );
+
   const cards = [
-    { title: "Total Clients", value: clients.length },
-    { title: "Today Appointments", value: todayAppointments.length },
-    { title: "Available Staff", value: availableStaff.length },
-    { title: "Low Stock Alerts", value: lowStockItems.length },
+    {
+      title: "Total Clients",
+      value: clients.length,
+      subtitle: "Registered salon clients",
+    },
+    {
+      title: "Today Appointments",
+      value: todayAppointments.length,
+      subtitle: "Scheduled for today",
+    },
+    {
+      title: "Available Staff",
+      value: availableStaff.length,
+      subtitle: "Ready for service",
+    },
+    {
+      title: "Low Stock Alerts",
+      value: lowStockItems.length,
+      subtitle: "Need attention",
+    },
   ];
 
   return (
-    <div className="dashboard">
-      <div className="cards-grid">
+    <div className="dashboard-page">
+      <div className="dashboard-hero">
+        <div>
+          <p className="dashboard-label">Veloura Salon Overview</p>
+          <h2>Luxury salon operations at a glance</h2>
+          <p className="dashboard-subtitle">
+            Monitor appointments, stock, clients, and team activity from one
+            elegant dashboard.
+          </p>
+        </div>
+
+        <div className="dashboard-hero-stats">
+          <div className="hero-mini-card">
+            <span>VIP Clients</span>
+            <strong>{vipClients.length}</strong>
+          </div>
+          <div className="hero-mini-card">
+            <span>Pending Bookings</span>
+            <strong>{pendingAppointments.length}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="cards-grid premium-cards-grid">
         {cards.map((card) => (
-          <div key={card.title} className="card">
+          <div key={card.title} className="card premium-card">
+            <div className="card-top-line"></div>
             <h3>{card.title}</h3>
             <p>{card.value}</p>
+            <span className="card-subtitle">{card.subtitle}</span>
           </div>
         ))}
       </div>
 
       <div className="dashboard-sections">
-        <div className="panel">
-          <h3>Today’s Appointments</h3>
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>Today’s Appointments</h3>
+            <span className="panel-badge">{todayAppointments.length}</span>
+          </div>
+
           <ul>
             {todayAppointments.length > 0 ? (
               todayAppointments.map((item) => (
-                <li key={item.id}>
-                  {item.time ? String(item.time).slice(0, 5) : ""} - {item.service} - {item.clientName}
+                <li key={item.id} className="dashboard-list-item">
+                  <div>
+                    <strong>{item.clientName}</strong>
+                    <p>{item.service}</p>
+                  </div>
+                  <span>
+                    {item.time ? String(item.time).slice(0, 5) : "--:--"}
+                  </span>
                 </li>
               ))
             ) : (
@@ -90,13 +144,23 @@ function Dashboard() {
           </ul>
         </div>
 
-        <div className="panel">
-          <h3>Inventory Alerts</h3>
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>Inventory Alerts</h3>
+            <span className="panel-badge danger-badge">{lowStockItems.length}</span>
+          </div>
+
           <ul>
             {lowStockItems.length > 0 ? (
               lowStockItems.map((item) => (
-                <li key={item.id}>
-                  {item.name} - Low Stock
+                <li key={item.id} className="dashboard-list-item">
+                  <div>
+                    <strong>{item.name}</strong>
+                    <p>{item.category}</p>
+                  </div>
+                  <span className="danger-text">
+                    {item.quantity} {item.unit}
+                  </span>
                 </li>
               ))
             ) : (
@@ -106,14 +170,22 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="dashboard-sections" style={{ marginTop: "18px" }}>
-        <div className="panel">
-          <h3>VIP Clients</h3>
+      <div className="dashboard-sections dashboard-sections-bottom">
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>VIP Clients</h3>
+            <span className="panel-badge">{vipClients.length}</span>
+          </div>
+
           <ul>
             {vipClients.length > 0 ? (
               vipClients.map((client) => (
-                <li key={client.id}>
-                  {client.name} - {client.preferredService || client.service}
+                <li key={client.id} className="dashboard-list-item">
+                  <div>
+                    <strong>{client.name}</strong>
+                    <p>{client.preferredService || client.service || "No preferred service"}</p>
+                  </div>
+                  <span className="vip-text">VIP</span>
                 </li>
               ))
             ) : (
@@ -122,28 +194,24 @@ function Dashboard() {
           </ul>
         </div>
 
-        <div className="panel">
-          <h3>Smart Insights</h3>
+        <div className="panel premium-panel">
+          <div className="panel-header">
+            <h3>Smart Notifications</h3>
+            <span className="panel-badge info-badge">{notifications.length}</span>
+          </div>
+
           <ul>
-            <li>VIP clients: {vipClients.length}</li>
-            <li>Available staff now: {availableStaff.length}</li>
-            <li>Low stock items: {lowStockItems.length}</li>
-            <li>Today bookings: {todayAppointments.length}</li>
+            {notifications.length > 0 ? (
+              notifications.slice(0, 5).map((notification, index) => (
+                <li key={index} className="notification-item">
+                  {notification.message}
+                </li>
+              ))
+            ) : (
+              <li>No notifications right now.</li>
+            )}
           </ul>
         </div>
-      </div>
-
-      <div className="panel" style={{ marginTop: "18px" }}>
-        <h3>Smart Notifications</h3>
-        <ul>
-          {notifications.length > 0 ? (
-            notifications.map((notification, index) => (
-              <li key={index}>{notification.message}</li>
-            ))
-          ) : (
-            <li>No notifications right now.</li>
-          )}
-        </ul>
       </div>
     </div>
   );

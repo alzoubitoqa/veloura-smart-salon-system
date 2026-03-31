@@ -12,16 +12,21 @@ function Navbar() {
 
   return (
     <header className="navbar">
-      <div>
-        <h1>Smart Salon Dashboard</h1>
+      <div className="navbar-left">
+        <h1>Veloura Management Dashboard</h1>
         <p>
           Welcome back{user ? `, ${user.name}` : ""}{" "}
-          {user ? `(${user.role})` : ""}
+          {user ? `• ${user.role}` : ""}
         </p>
       </div>
 
       <div className="navbar-right">
-        <button onClick={handleLogout}>Logout</button>
+        <div className="user-badge">
+          {user?.name ? user.name.charAt(0).toUpperCase() : "V"}
+        </div>
+        <button onClick={handleLogout} className="logout-btn">
+          Logout
+        </button>
       </div>
     </header>
   );

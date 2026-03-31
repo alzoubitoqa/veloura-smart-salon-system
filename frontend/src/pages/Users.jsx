@@ -76,11 +76,14 @@ function Users() {
   };
 
   return (
-    <div className="clients-page">
-      <div className="page-header">
+    <div className="users-page premium-page">
+      <div className="page-hero">
         <div>
-          <h2>Users Management</h2>
-          <p>Create and manage system accounts.</p>
+          <p className="dashboard-label">Veloura Access Control</p>
+          <h2>Secure user management and team access control</h2>
+          <p className="dashboard-subtitle">
+            Create system accounts, manage roles, and control access across the salon platform.
+          </p>
         </div>
 
         <button className="primary-btn" onClick={() => setShowForm(!showForm)}>
@@ -89,7 +92,7 @@ function Users() {
       </div>
 
       {showForm && (
-        <form className="client-form" onSubmit={handleCreateUser}>
+        <form className="client-form premium-form" onSubmit={handleCreateUser}>
           <div className="form-grid">
             <input
               type="text"
@@ -135,7 +138,7 @@ function Users() {
         </form>
       )}
 
-      <div className="table-card">
+      <div className="table-card premium-table-card">
         <table className="clients-table">
           <thead>
             <tr>
@@ -151,9 +154,20 @@ function Users() {
             {users.length > 0 ? (
               users.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.name}</td>
+                  <td>
+                    <div className="client-name-cell">
+                      <div className="client-avatar">
+                        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                      </div>
+                      <span>{user.name}</span>
+                    </div>
+                  </td>
                   <td>{user.email}</td>
-                  <td>{user.role}</td>
+                  <td>
+                    <span className={`status-badge ${user.role === "admin" ? "confirmed" : user.role === "reception" ? "pending" : "completed"}`}>
+                      {user.role}
+                    </span>
+                  </td>
                   <td>
                     <select
                       className="form-select"
@@ -188,12 +202,16 @@ function Users() {
         </table>
       </div>
 
-      <div className="panel" style={{ marginTop: "18px" }}>
-        <h3>Available Roles</h3>
+      <div className="panel premium-panel">
+        <div className="panel-header">
+          <h3>Available Roles</h3>
+          <span className="panel-badge info-badge">3</span>
+        </div>
+
         <ul>
-          <li>Admin: full access</li>
-          <li>Reception: clients and appointments</li>
-          <li>Staff: appointments only</li>
+          <li className="notification-item">Admin: full access to the entire system.</li>
+          <li className="notification-item">Reception: clients and appointments access.</li>
+          <li className="notification-item">Staff: appointments-focused access only.</li>
         </ul>
       </div>
     </div>

@@ -66,17 +66,29 @@ function Staff() {
   );
 
   const getStatusClass = (status) => {
-    if (status === "Available") return "completed";
-    if (status === "Busy") return "pending";
+    const normalized = String(status).toLowerCase();
+    if (normalized === "available") return "completed";
+    if (normalized === "busy") return "pending";
+    return "cancelled";
+  };
+
+  const getSpeedClass = (speed) => {
+    const normalized = String(speed).toLowerCase();
+    if (normalized === "fast") return "confirmed";
+    if (normalized === "medium") return "pending";
     return "cancelled";
   };
 
   return (
-    <div className="staff-page">
-      <div className="page-header">
+    <div className="staff-page premium-page">
+      <div className="page-hero">
         <div>
-          <h2>Staff Management</h2>
-          <p>Manage employees, specialties, availability, and performance.</p>
+          <p className="dashboard-label">Veloura Team Performance</p>
+          <h2>Premium staff management and service efficiency tracking</h2>
+          <p className="dashboard-subtitle">
+            Monitor specialties, speed, availability, and performance to keep
+            the salon running with precision.
+          </p>
         </div>
 
         <button className="primary-btn" onClick={() => setShowForm(!showForm)}>
@@ -84,10 +96,10 @@ function Staff() {
         </button>
       </div>
 
-      <div className="toolbar">
+      <div className="toolbar premium-toolbar">
         <input
           type="text"
-          placeholder="Search staff..."
+          placeholder="Search staff by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
@@ -95,7 +107,7 @@ function Staff() {
       </div>
 
       {showForm && (
-        <form className="client-form" onSubmit={handleAddStaff}>
+        <form className="client-form premium-form" onSubmit={handleAddStaff}>
           <div className="form-grid">
             <input
               type="text"
@@ -155,7 +167,7 @@ function Staff() {
         </form>
       )}
 
-      <div className="table-card">
+      <div className="table-card premium-table-card">
         <table className="clients-table">
           <thead>
             <tr>
@@ -171,9 +183,20 @@ function Staff() {
             {filteredStaff.length > 0 ? (
               filteredStaff.map((staff) => (
                 <tr key={staff.id}>
-                  <td>{staff.name}</td>
+                  <td>
+                    <div className="client-name-cell">
+                      <div className="client-avatar">
+                        {staff.name ? staff.name.charAt(0).toUpperCase() : "S"}
+                      </div>
+                      <span>{staff.name}</span>
+                    </div>
+                  </td>
                   <td>{staff.specialty}</td>
-                  <td>{staff.speed}</td>
+                  <td>
+                    <span className={`status-badge ${getSpeedClass(staff.speed)}`}>
+                      {staff.speed}
+                    </span>
+                  </td>
                   <td>
                     <span className={`status-badge ${getStatusClass(staff.status)}`}>
                       {staff.status}

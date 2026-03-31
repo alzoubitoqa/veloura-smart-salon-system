@@ -79,12 +79,19 @@ function Inventory() {
     return Number(quantity) <= Number(minLevel) ? "Low Stock" : "In Stock";
   };
 
+  const getStockClass = (status) => {
+    return status === "Low Stock" ? "cancelled" : "completed";
+  };
+
   return (
-    <div className="inventory-page">
-      <div className="page-header">
+    <div className="inventory-page premium-page">
+      <div className="page-hero">
         <div>
-          <h2>Inventory Management</h2>
-          <p>Track salon materials and stock alerts.</p>
+          <p className="dashboard-label">Veloura Inventory Control</p>
+          <h2>Luxury stock monitoring and material flow management</h2>
+          <p className="dashboard-subtitle">
+            Track salon products, monitor low stock items, and keep operations smooth with smart inventory visibility.
+          </p>
         </div>
 
         <button className="primary-btn" onClick={() => setShowForm(!showForm)}>
@@ -92,10 +99,10 @@ function Inventory() {
         </button>
       </div>
 
-      <div className="toolbar">
+      <div className="toolbar premium-toolbar">
         <input
           type="text"
-          placeholder="Search item..."
+          placeholder="Search item by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
@@ -103,7 +110,7 @@ function Inventory() {
       </div>
 
       {showForm && (
-        <form className="client-form" onSubmit={handleAddItem}>
+        <form className="client-form premium-form" onSubmit={handleAddItem}>
           <div className="form-grid">
             <input
               type="text"
@@ -154,7 +161,7 @@ function Inventory() {
         </form>
       )}
 
-      <div className="table-card">
+      <div className="table-card premium-table-card">
         <table className="clients-table">
           <thead>
             <tr>
@@ -174,17 +181,20 @@ function Inventory() {
 
                 return (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
+                    <td>
+                      <div className="client-name-cell">
+                        <div className="client-avatar">
+                          {item.name ? item.name.charAt(0).toUpperCase() : "I"}
+                        </div>
+                        <span>{item.name}</span>
+                      </div>
+                    </td>
                     <td>{item.category}</td>
                     <td>{item.quantity}</td>
                     <td>{item.minLevel}</td>
                     <td>{item.unit}</td>
                     <td>
-                      <span
-                        className={`status-badge ${
-                          status === "Low Stock" ? "cancelled" : "completed"
-                        }`}
-                      >
+                      <span className={`status-badge ${getStockClass(status)}`}>
                         {status}
                       </span>
                     </td>

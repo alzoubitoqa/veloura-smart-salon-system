@@ -49,6 +49,9 @@ function Appointments() {
       Fast: 3,
       Medium: 2,
       Slow: 1,
+      fast: 3,
+      medium: 2,
+      slow: 1,
     }),
     []
   );
@@ -58,6 +61,9 @@ function Appointments() {
       Fast: 0.8,
       Medium: 1,
       Slow: 1.2,
+      fast: 0.8,
+      medium: 1,
+      slow: 1.2,
     }),
     []
   );
@@ -103,8 +109,8 @@ function Appointments() {
     const matchedAvailableStaff = staffList
       .filter(
         (staff) =>
-          staff.status === "Available" &&
-          staff.specialty.toLowerCase().includes(normalizedService)
+          String(staff.status).toLowerCase() === "available" &&
+          String(staff.specialty).toLowerCase().includes(normalizedService)
       )
       .sort((a, b) => (speedRank[b.speed] || 0) - (speedRank[a.speed] || 0));
 
@@ -115,7 +121,7 @@ function Appointments() {
       setRecommendedStaff(best.name);
     } else {
       const fallbackAvailableStaff = staffList
-        .filter((staff) => staff.status === "Available")
+        .filter((staff) => String(staff.status).toLowerCase() === "available")
         .sort((a, b) => (speedRank[b.speed] || 0) - (speedRank[a.speed] || 0));
 
       if (fallbackAvailableStaff.length > 0) {
@@ -161,7 +167,7 @@ function Appointments() {
     });
 
     if (name === "service") {
-      suggestBestStaff(value, name === "time" ? value : newAppointment.time);
+      suggestBestStaff(value, newAppointment.time);
     }
 
     if (name === "time" && newAppointment.service) {
@@ -254,11 +260,15 @@ function Appointments() {
     : appointments;
 
   return (
-    <div className="appointments-page">
-      <div className="page-header">
+    <div className="appointments-page premium-page">
+      <div className="page-hero">
         <div>
-          <h2>Appointments Management</h2>
-          <p>Manage salon bookings with smart staff and duration estimation.</p>
+          <p className="dashboard-label">Veloura Booking Flow</p>
+          <h2>Luxury scheduling with smart assignment and timing</h2>
+          <p className="dashboard-subtitle">
+            Manage salon appointments with intelligent staff recommendation,
+            duration estimation, and clear booking flow.
+          </p>
         </div>
 
         <button className="primary-btn" onClick={() => setShowForm(!showForm)}>
@@ -266,7 +276,7 @@ function Appointments() {
         </button>
       </div>
 
-      <div className="toolbar">
+      <div className="toolbar premium-toolbar">
         <input
           type="date"
           value={filterDate}
@@ -276,7 +286,7 @@ function Appointments() {
       </div>
 
       {showForm && (
-        <form className="client-form" onSubmit={handleAddOrUpdateAppointment}>
+        <form className="client-form premium-form" onSubmit={handleAddOrUpdateAppointment}>
           <div className="form-grid">
             <input
               type="text"
@@ -376,7 +386,7 @@ function Appointments() {
         </form>
       )}
 
-      <div className="table-card">
+      <div className="table-card premium-table-card">
         <table className="clients-table">
           <thead>
             <tr>
@@ -396,7 +406,16 @@ function Appointments() {
             {filteredAppointments.length > 0 ? (
               filteredAppointments.map((appointment) => (
                 <tr key={appointment.id}>
-                  <td>{appointment.clientName}</td>
+                  <td>
+                    <div className="client-name-cell">
+                      <div className="client-avatar">
+                        {appointment.clientName
+                          ? appointment.clientName.charAt(0).toUpperCase()
+                          : "A"}
+                      </div>
+                      <span>{appointment.clientName}</span>
+                    </div>
+                  </td>
                   <td>{appointment.service}</td>
                   <td>{appointment.staff}</td>
                   <td>{appointment.date ? String(appointment.date).split("T")[0] : ""}</td>
@@ -408,7 +427,7 @@ function Appointments() {
                   </td>
                   <td>{appointment.endTime ? String(appointment.endTime).slice(0, 5) : "-"}</td>
                   <td>
-                    <span className={`status-badge ${appointment.status.toLowerCase()}`}>
+                    <span className={`status-badge ${String(appointment.status).toLowerCase()}`}>
                       {appointment.status}
                     </span>
                   </td>

@@ -7,8 +7,11 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <h2>Pearls Salon</h2>
-        <p>Smart Management</p>
+        <div className="sidebar-logo">V</div>
+        <div>
+          <h2>Veloura Salon</h2>
+          <p>Smart Management</p>
+        </div>
       </div>
 
       <nav className="sidebar-menu">
