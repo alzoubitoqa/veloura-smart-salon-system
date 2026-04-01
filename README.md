@@ -1,122 +1,125 @@
-# AI-Powered Smart Salon Management System
+# 💎 Veloura – AI-Powered Smart Salon Management System
 
-A full-stack smart management system designed for high-end salons.  
-The system helps manage appointments, clients, staff, inventory, users, and business insights through one dashboard, with AI-powered recommendations and notifications.
-
----
-
-## Project Overview
-
-This project was built to improve salon operations by focusing on three main goals:
-
-- Reducing appointment congestion through smart staff recommendations
-- Controlling inventory and minimizing material waste
-- Improving client loyalty using digital memory, VIP logic, and personalized offers
-
-The system combines:
-
-- Frontend: React + Vite
-- Backend: Node.js + Express
-- Database: MySQL
-- AI Engine: Python + Flask
+A full-stack intelligent salon management system designed for modern, high-end beauty salons.  
+The platform centralizes operations into a single dashboard while leveraging AI to enhance decision-making, optimize scheduling, and improve customer experience.
 
 ---
 
-# Main Features
+## 🚀 Project Overview
 
-## Authentication & Roles
+Veloura was developed to solve real-world salon challenges through technology and AI.
 
-- Secure login system
-- Password hashing with bcrypt
-- User roles:
+The system focuses on three core objectives:
+
+- Reducing appointment congestion using smart staff recommendations
+- Minimizing inventory waste through intelligent tracking
+- Increasing customer loyalty via personalized experiences and VIP logic
+
+---
+
+## 🧠 Key Features
+
+### 🔐 Authentication & Roles
+- Secure login system (JWT-based)
+- Password hashing using bcrypt
+- Role-based access:
   - Admin
   - Reception
   - Staff
-- Role-based page access
 
 ---
 
-## Dashboard
-
-- Total clients
-- Today appointments
-- Available staff
+### 📊 Dashboard
+- Total clients overview
+- Daily appointments tracking
+- Available staff monitoring
 - Low stock alerts
-- VIP clients
-- Smart notifications
+- VIP client tracking
+- Smart notifications system
 
 ---
 
-## Clients Management
-
+### 👩‍💼 Client Management
 - Add / edit / delete clients
-- Store visit history
+- Track visit history
 - Loyalty level calculation
 - Preferred service memory
-- Smart offer suggestion
+- AI-powered offer suggestions
 
 ---
 
-## Appointments Management
-
-- Add / edit / delete appointments
-- Smart staff recommendation
-- Estimated appointment duration
-- Expected end time
+### 📅 Appointment Management
+- Create / update / delete appointments
+- Smart staff recommendation (AI)
+- Estimated duration calculation
+- Expected end time prediction
 - Appointment status tracking
 
 ---
 
-## Staff Management
-
-- Add and manage staff members
-- Specialty
-- Speed
-- Performance
-- Availability
+### 👨‍🔧 Staff Management
+- Manage staff profiles
+- Specialty tracking
+- Speed & performance monitoring
+- Availability status
 
 ---
 
-## Inventory Management
-
-- Add inventory items
-- Track quantity and minimum level
-- Low stock alerts
+### 📦 Inventory Management
+- Track product quantities
+- Minimum stock level alerts
 - Smart stock monitoring
+- Usage-based insights
 
 ---
 
-## Reports & Insights
-
-- Most popular service
-- Top performing staff
-- Most loyal client
-- Completion rate
-- AI-powered peak hour analysis
-- AI stock risk analysis
-- AI loyalty analysis
-
----
-
-## Users Management
-
-- Add new users
-- Change user role
-- Delete users
-- Admin-only access
+### 📈 Reports & Insights
+- Most popular services
+- Top-performing staff
+- Most loyal clients
+- Appointment completion rate
+- AI-powered analytics:
+  - Peak hours prediction
+  - Inventory risk detection
+  - Loyalty behavior analysis
 
 ---
 
-## Smart Notifications
-
+### 🔔 Smart Notifications
 - Inactive client reminders
-- VIP follow-up reminders
-- Low stock alerts
+- VIP follow-up alerts
+- Low stock warnings
 - Busy hour alerts
 
 ---
 
-# Project Structure
+## 🛠️ Tech Stack
+
+### Frontend
+- React + Vite
+- React Router DOM
+- Axios
+- CSS
+
+### Backend
+- Node.js + Express
+- MySQL2
+- JWT Authentication
+- bcryptjs
+- CORS
+- dotenv
+
+### AI Engine
+- Python + Flask
+- Flask-CORS
+- Pandas
+
+### Database
+- MySQL (XAMPP / phpMyAdmin)
+
+---
+
+## 📂 Project Structure
 
 ```bash
 smart-salon-management-system/
@@ -124,108 +127,35 @@ smart-salon-management-system/
 ├── frontend/
 ├── backend/
 ├── ai-engine/
-├── database/
-├── docs/
 └── README.md
 
-Tech Stack
-Frontend
-
-React
-
-Vite
-
-React Router DOM
-
-Axios
-
-CSS
-
-Backend
-
-Node.js
-
-Express
-
-MySQL2
-
-JWT
-
-bcryptjs
-
-CORS
-
-dotenv
-
-AI Engine
-
-Python
-
-Flask
-
-Flask-CORS
-
-Pandas
-
-Database
-
-MySQL
-
-phpMyAdmin / XAMPP
-
-Database Tables
-
-The system uses the following main tables:
-
-users
-
-clients
-
-appointments
-
-inventory
-
-staff
-
-Additional fields were added to support:
-
-loyalty logic
-
-appointment duration estimation
-
-AI recommendations
-
-smart notifications
-
-Installation & Setup
-1. Clone the project
-git clone <alzoubitoqa>
+⚙️ Installation & Setup
+1. Clone the Repository
+git clone https://github.com/alzoubitoqa/veloura-smart-salon-system.git
 cd smart-salon-management-system
-Frontend Setup
+
+2. Frontend Setup
 cd frontend
 npm install
 npm run dev
 
-Frontend runs on:
+Runs on: http://localhost:5173
 
-http://localhost:5173
-Backend Setup
+3. Backend Setup
 cd backend
 npm install
 npm run dev
 
-Backend runs on:
+Runs on: http://localhost:5000
 
-http://localhost:5000
-AI Engine Setup
+4. AI Engine Setup
 cd ai-engine
 pip install -r requirements.txt
 python app.py
 
-AI engine runs on:
+Runs on: http://localhost:8000
 
-http://localhost:8000
-Environment Variables
+🔐 Environment Variables
 
 Create a .env file inside backend/:
 
@@ -236,79 +166,66 @@ DB_USER=root
 DB_PASSWORD=
 DB_NAME=smart_salon_db
 JWT_SECRET=smart_salon_super_secret_key_2026
-Database Setup
 
-Create the database in MySQL:
-
+🗄️ Database Setup
 CREATE DATABASE smart_salon_db;
 
-Then create the required tables:
+Then create the following tables:
 
 users
-
 clients
-
 appointments
-
 inventory
-
 staff
 
-You can also run your saved SQL schema if available.
-
-Demo Accounts
-
-After seeding users, you can log in with:
+🔑 Demo Accounts
 
 Admin
 
-Email: admin@pearls.com
+Email: admin@veloura.com
 Password: 123456
 
 Reception
 
-Email: reception@pearls.com
+Email: reception@veloura.com
 Password: 123456
 
 Staff
 
-Email: staff@pearls.com
+Email: staff@veloura.com
 Password: 123456
 
-AI Features
+🤖 AI Capabilities
 
-The AI engine currently provides:
+The system includes intelligent modules for:
 
 Peak hour analysis
-
-Inventory risk analysis
-
+Inventory risk prediction
 Client loyalty analysis
+Smart staff recommendations
+Automated notifications logic
 
-Smart recommendations for salon management
-
-It also supports:
-
-Smart appointment recommendations
-
-Smart notifications
-
-VIP follow-up logic
-
-Future Improvements
-
-Possible future enhancements include:
-
-WhatsApp / SMS reminder simulation
-
-Export PDF reports
-
+🚀 Future Improvements
+WhatsApp / SMS notifications
+PDF report export
 Image upload for clients
+Advanced analytics dashboard
+Cloud deployment
+Real-time updates (WebSockets)
 
-Advanced analytics charts
+👩‍💻 Author
 
-Deployment to cloud
+Toqa Al-Zoubi
+AI & Machine Learning Engineer
 
-Real-time notifications
+🔗 GitHub: https://github.com/alzoubitoqa
 
-Better schedule conflict detection
+⭐ Final Note
+
+This project demonstrates the integration of:
+
+Artificial Intelligence
+Full-Stack Development
+Real-world business problem solving
+
+It reflects a scalable system ready for real-world deployment.
