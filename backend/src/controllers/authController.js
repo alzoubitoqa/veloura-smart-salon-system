@@ -2,29 +2,44 @@ const db = require("../config/db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+// ================= LOGIN =================
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
 
-    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    // تنظيف الإيميل
+    email = email.trim().toLowerCase();
+
+    const [rows] = await db.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
 
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const user = rows[0];
-    const isMatch = await bcrypt.compare(password, user.password);
+
+    // حل مشكلة blob
+    const storedPassword = Buffer.isBuffer(user.password)
+      ? user.password.toString("utf8")
+      : String(user.password);
+
+    // مقارنة الباسورد
+    const isMatch = await bcrypt.compare(password, storedPassword);
 
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // توليد التوكن
     const token = jwt.sign(
       {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role || "admin",
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
@@ -37,7 +52,7 @@ const login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role || "admin",
       },
     });
   } catch (error) {
@@ -48,17 +63,20 @@ const login = async (req, res) => {
   }
 };
 
+// ================= REGISTER =================
 const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+
     const [existingUsers] = await db.query(
       "SELECT * FROM users WHERE email = ?",
-      [email]
+      [cleanEmail]
     );
 
     if (existingUsers.length > 0) {
@@ -67,14 +85,13 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const [result] = await db.query(
+    await db.query(
       "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-      [name, email, hashedPassword, role]
+      [name, cleanEmail, hashedPassword, role || "admin"]
     );
 
     res.status(201).json({
       message: "User created successfully",
-      id: result.insertId,
     });
   } catch (error) {
     res.status(500).json({
@@ -84,6 +101,7 @@ const register = async (req, res) => {
   }
 };
 
+// ================= GET USERS =================
 const getAllUsers = async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -98,6 +116,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// ================= UPDATE ROLE =================
 const updateUserRole = async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,6 +137,7 @@ const updateUserRole = async (req, res) => {
   }
 };
 
+// ================= DELETE USER =================
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;

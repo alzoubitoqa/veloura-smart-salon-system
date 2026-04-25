@@ -1,7 +1,21 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: "https://veloura-backend-1.onrender.com/api",
 });
 
 export default API;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
