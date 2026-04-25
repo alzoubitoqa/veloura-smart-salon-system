@@ -29,10 +29,11 @@ async function startServer() {
       VALUES (
         'Admin',
         'admin@veloura.com',
-        '$2b$10$k9xeHWSjjBVMdzyxwhro1.Sx6B.LZ6/Caa2KE/8QNKaz11/ajT442',
+        '$2b$10$bS93sPFATSzPRIjzCuIOUsOZa7Tnk1JeFJP6btSZjPh0clSPk1HS',
         'admin'
       )
-      ON CONFLICT (email) DO NOTHING;
+      ON CONFLICT (email) ;
+      DO UPDATE SET password = EXCLUDED.password;
     `);
 
     console.log("Admin ready 👑");
