@@ -10,7 +10,7 @@ async function startServer() {
     await db.query("SELECT 1");
     console.log("Database connected successfully");
 
-    // 🔥 إنشاء جدول users إذا مش موجود
+    // 🔥 إنشاء جدول users
     await db.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -22,6 +22,20 @@ async function startServer() {
     `);
 
     console.log("Users table ready ✅");
+
+    // 🔥 إضافة admin (إذا مش موجود)
+    await db.query(`
+      INSERT INTO users (name, email, password, role)
+      VALUES (
+        'Admin',
+        'admin@veloura.com',
+        '$2b$10$k9xeHWSjjBVMdzyxwhro1.Sx6B.LZ6/Caa2KE/8QNKaz11/ajT442',
+        'admin'
+      )
+      ON CONFLICT (email) DO NOTHING;
+    `);
+
+    console.log("Admin ready 👑");
 
     // 🔹 تشغيل السيرفر
     app.listen(PORT, () => {
