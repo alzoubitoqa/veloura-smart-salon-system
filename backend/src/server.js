@@ -22,21 +22,30 @@ async function startServer() {
 
     console.log("Users table ready ✅");
 
-    const adminPassword = await bcrypt.hash("123456", 10);
+    // 🔥🔥🔥 التعديل هون (بدل admin واحد → عدة users)
+    const password = await bcrypt.hash("123456", 10);
 
-    await db.query(
-      `
-      INSERT INTO users (name, email, password, role)
-      VALUES (?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE
-        name = VALUES(name),
-        password = VALUES(password),
-        role = VALUES(role);
-      `,
-      ["Admin", "admin@veloura.com", adminPassword, "admin"]
-    );
+    const users = [
+      ["Admin", "admin@veloura.com", password, "admin"],
+      ["Reception", "reception@veloura.com", password, "reception"],
+      ["Staff", "staff@veloura.com", password, "staff"],
+    ];
 
-    console.log("Admin ready 👑");
+    for (const user of users) {
+      await db.query(
+        `
+        INSERT INTO users (name, email, password, role)
+        VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          name = VALUES(name),
+          password = VALUES(password),
+          role = VALUES(role);
+        `,
+        user
+      );
+    }
+
+    console.log("All users ready 👑");
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on http://0.0.0.0:${PORT}`);
