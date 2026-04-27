@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VelouraSalon</string>
+    <string name="title_activity_main">VelouraSalon</string>
+    <string name="package_name">com.veloura.salon</string>
+    <string name="custom_url_scheme">com.veloura.salon</string>
+</resources>

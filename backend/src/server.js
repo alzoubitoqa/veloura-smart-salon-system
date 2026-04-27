@@ -7,11 +7,9 @@ const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {
-    // اختبار الاتصال
     await db.query("SELECT 1");
     console.log("Database connected successfully");
 
-    // إنشاء جدول users - MySQL
     await db.query(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,7 +22,6 @@ async function startServer() {
 
     console.log("Users table ready ✅");
 
-    // إنشاء/تحديث admin بباسورد 123456
     const adminPassword = await bcrypt.hash("123456", 10);
 
     await db.query(
@@ -41,9 +38,9 @@ async function startServer() {
 
     console.log("Admin ready 👑");
 
-    // تشغيل السيرفر
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://0.0.0.0:${PORT}`);
+      console.log(`Mobile access: http://192.168.1.109:${PORT}`);
     });
 
   } catch (error) {
