@@ -8,12 +8,10 @@ const login = async (req, res) => {
 
     email = email.trim().toLowerCase();
 
-    const result = await db.query(
-      "SELECT * FROM users WHERE email = $1",
+    const [rows] = await db.query(
+      "SELECT * FROM users WHERE email = ?",
       [email]
     );
-
-    const rows = result.rows;
 
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -66,25 +64,25 @@ const register = async (req, res) => {
 
     email = email.trim().toLowerCase();
 
-    const existingUsers = await db.query(
-      "SELECT * FROM users WHERE email = $1",
+    const [existingUsers] = await db.query(
+      "SELECT * FROM users WHERE email = ?",
       [email]
     );
 
-    if (existingUsers.rows.length > 0) {
+    if (existingUsers.length > 0) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await db.query(
-      "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id",
+    const [result] = await db.query(
+      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
       [name, email, hashedPassword, role || "admin"]
     );
 
     res.status(201).json({
       message: "User created successfully",
-      id: result.rows[0].id,
+      id: result.insertId,
     });
   } catch (error) {
     res.status(500).json({
@@ -96,11 +94,11 @@ const register = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const result = await db.query(
+    const [rows] = await db.query(
       "SELECT id, name, email, role FROM users ORDER BY id DESC"
     );
 
-    res.json(result.rows);
+    res.json(rows);
   } catch (error) {
     res.status(500).json({
       message: "Failed to fetch users",
@@ -118,7 +116,7 @@ const updateUserRole = async (req, res) => {
       return res.status(400).json({ message: "Role is required" });
     }
 
-    await db.query("UPDATE users SET role = $1 WHERE id = $2", [role, id]);
+    await db.query("UPDATE users SET role = ? WHERE id = ?", [role, id]);
 
     res.json({ message: "User role updated successfully" });
   } catch (error) {
@@ -133,7 +131,7 @@ const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await db.query("DELETE FROM users WHERE id = $1", [id]);
+    await db.query("DELETE FROM users WHERE id = ?", [id]);
 
     res.json({ message: "User deleted successfully" });
   } catch (error) {

@@ -1,44 +1,47 @@
 require("dotenv").config();
 const app = require("./app");
 const db = require("./config/db");
+const bcrypt = require("bcryptjs");
 
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {
-    // 🔹 تأكد الاتصال
+    // اختبار الاتصال
     await db.query("SELECT 1");
     console.log("Database connected successfully");
 
-    // 🔥 إنشاء جدول users
+    // إنشاء جدول users - MySQL
     await db.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name TEXT,
-        email TEXT UNIQUE,
-        password TEXT,
-        role TEXT
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        email VARCHAR(255) UNIQUE,
+        password VARCHAR(255),
+        role VARCHAR(50)
       );
     `);
 
     console.log("Users table ready ✅");
 
-    // 🔥 إضافة admin (إذا مش موجود)
-    await db.query(`
+    // إنشاء/تحديث admin بباسورد 123456
+    const adminPassword = await bcrypt.hash("123456", 10);
+
+    await db.query(
+      `
       INSERT INTO users (name, email, password, role)
-      VALUES (
-        'Admin',
-        'admin@veloura.com',
-        '$2b$10$bS93sPFATSzPRIjzCuIOUsOZa7Tnk1JeFJP6btSZjPh0clSPk1HS',
-        'admin'
-      )
-      ON CONFLICT (email) ;
-      DO UPDATE SET password = EXCLUDED.password;
-    `);
+      VALUES (?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        name = VALUES(name),
+        password = VALUES(password),
+        role = VALUES(role);
+      `,
+      ["Admin", "admin@veloura.com", adminPassword, "admin"]
+    );
 
     console.log("Admin ready 👑");
 
-    // 🔹 تشغيل السيرفر
+    // تشغيل السيرفر
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
